@@ -98,7 +98,7 @@ export function RoutedTabs(props: { routes: SubRoute[] }) {
         onChange={onTabChange}
       />
       <Content>
-        <Helmet title={route.title} />
+        <Helmet title={(route.title as string) ?? undefined} />
         {element}
       </Content>
     </>

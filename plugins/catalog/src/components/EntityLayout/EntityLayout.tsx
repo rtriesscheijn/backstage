@@ -53,7 +53,7 @@ import { EntityContextMenu } from '../EntityContextMenu/EntityContextMenu';
 /** @public */
 export type EntityLayoutRouteProps = {
   path: string;
-  title: string;
+  title: string | JSX.Element;
   children: JSX.Element;
   if?: (entity: Entity) => boolean;
   tabProps?: TabProps<React.ElementType, { component?: React.ElementType }>;

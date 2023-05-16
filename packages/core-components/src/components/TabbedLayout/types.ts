@@ -19,7 +19,7 @@ import * as React from 'react';
 
 export type SubRoute = {
   path: string;
-  title: string;
+  title: string | JSX.Element;
   children: JSX.Element;
   tabProps?: TabProps<React.ElementType, { component?: React.ElementType }>;
 };

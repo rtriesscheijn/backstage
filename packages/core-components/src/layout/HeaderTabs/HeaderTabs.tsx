@@ -59,7 +59,7 @@ const useStyles = makeStyles(
 
 export type Tab = {
   id: string;
-  label: string;
+  label: string | JSX.Element;
   tabProps?: TabProps<React.ElementType, { component?: React.ElementType }>;
 };
 

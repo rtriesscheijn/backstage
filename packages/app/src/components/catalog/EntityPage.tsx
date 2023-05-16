@@ -171,6 +171,7 @@ import {
   isLinguistAvailable,
   EntityLinguistCard,
 } from '@backstage/plugin-linguist';
+import { makeStyles } from '@material-ui/core/styles';
 
 const customEntityFilterKind = ['Component', 'API', 'System'];
 
@@ -444,113 +445,126 @@ const overviewContent = (
   </Grid>
 );
 
-const serviceEntityPage = (
-  <EntityLayoutWrapper>
-    <EntityLayout.Route path="/" title="Overview">
-      {overviewContent}
-    </EntityLayout.Route>
+const useStyles = makeStyles(theme => ({
+  tabsButton: {
+    ...theme.typography.caption,
+    width: '100%',
+  },
+}));
 
-    <EntityLayout.Route path="/ci-cd" title="CI/CD">
-      {cicdContent}
-    </EntityLayout.Route>
+const ServiceEntityPage = () => {
+  const styles = useStyles();
+  return (
+    <EntityLayoutWrapper>
+      <EntityLayout.Route path="/" title="Overview">
+        {overviewContent}
+      </EntityLayout.Route>
 
-    <EntityLayout.Route path="/errors" title="Errors">
-      {errorsContent}
-    </EntityLayout.Route>
+      <EntityLayout.Route
+        path="/ci-cd"
+        title={<Button className={styles.tabsButton}>Foo</Button>}
+      >
+        {cicdContent}
+      </EntityLayout.Route>
 
-    <EntityLayout.Route path="/api" title="API">
-      <Grid container spacing={3} alignItems="stretch">
-        <Grid item xs={12} md={6}>
-          <EntityProvidedApisCard />
+      <EntityLayout.Route path="/errors" title="Errors">
+        {errorsContent}
+      </EntityLayout.Route>
+
+      <EntityLayout.Route path="/api" title="API">
+        <Grid container spacing={3} alignItems="stretch">
+          <Grid item xs={12} md={6}>
+            <EntityProvidedApisCard />
+          </Grid>
+          <Grid item xs={12} md={6}>
+            <EntityConsumedApisCard />
+          </Grid>
         </Grid>
-        <Grid item xs={12} md={6}>
-          <EntityConsumedApisCard />
+      </EntityLayout.Route>
+
+      <EntityLayout.Route path="/dependencies" title="Dependencies">
+        <Grid container spacing={3} alignItems="stretch">
+          <Grid item xs={12} md={6}>
+            <EntityDependsOnComponentsCard variant="gridItem" />
+          </Grid>
+          <Grid item xs={12} md={6}>
+            <EntityDependsOnResourcesCard variant="gridItem" />
+          </Grid>
         </Grid>
-      </Grid>
-    </EntityLayout.Route>
+      </EntityLayout.Route>
 
-    <EntityLayout.Route path="/dependencies" title="Dependencies">
-      <Grid container spacing={3} alignItems="stretch">
-        <Grid item xs={12} md={6}>
-          <EntityDependsOnComponentsCard variant="gridItem" />
+      <EntityLayout.Route path="/docs" title="Docs">
+        {techdocsContent}
+      </EntityLayout.Route>
+
+      <EntityLayout.Route
+        if={isNewRelicDashboardAvailable}
+        path="/newrelic-dashboard"
+        title="New Relic Dashboard"
+      >
+        <EntityNewRelicDashboardContent />
+      </EntityLayout.Route>
+
+      <EntityLayout.Route path="/kubernetes" title="Kubernetes">
+        <EntityKubernetesContent />
+      </EntityLayout.Route>
+
+      <EntityLayout.Route path="/pull-requests" title="Pull Requests">
+        {pullRequestsContent}
+      </EntityLayout.Route>
+
+      <EntityLayout.Route path="/code-insights" title="Code Insights">
+        <EntityGithubInsightsContent />
+      </EntityLayout.Route>
+
+      <EntityLayout.Route path="/tech-insights" title="Scorecards">
+        <Grid container spacing={3} alignItems="stretch">
+          <Grid item xs={12} md={6}>
+            <EntityTechInsightsScorecardCard
+              title="Scorecard 1"
+              description="This is a sample scorecard no. 1"
+              checksId={['titleCheck']}
+            />
+          </Grid>
+          <Grid item xs={12} md={6}>
+            <EntityTechInsightsScorecardCard
+              title="Scorecard 2"
+              checksId={['techDocsCheck']}
+            />
+          </Grid>
         </Grid>
-        <Grid item xs={12} md={6}>
-          <EntityDependsOnResourcesCard variant="gridItem" />
-        </Grid>
-      </Grid>
-    </EntityLayout.Route>
+      </EntityLayout.Route>
 
-    <EntityLayout.Route path="/docs" title="Docs">
-      {techdocsContent}
-    </EntityLayout.Route>
+      <EntityLayout.Route path="/code-coverage" title="Code Coverage">
+        <EntityCodeCoverageContent />
+      </EntityLayout.Route>
 
-    <EntityLayout.Route
-      if={isNewRelicDashboardAvailable}
-      path="/newrelic-dashboard"
-      title="New Relic Dashboard"
-    >
-      <EntityNewRelicDashboardContent />
-    </EntityLayout.Route>
+      <EntityLayout.Route path="/kafka" title="Kafka">
+        <EntityKafkaContent />
+      </EntityLayout.Route>
 
-    <EntityLayout.Route path="/kubernetes" title="Kubernetes">
-      <EntityKubernetesContent />
-    </EntityLayout.Route>
+      <EntityLayout.Route path="/todos" title="TODOs">
+        <EntityTodoContent />
+      </EntityLayout.Route>
 
-    <EntityLayout.Route path="/pull-requests" title="Pull Requests">
-      {pullRequestsContent}
-    </EntityLayout.Route>
+      <EntityLayout.Route path="/costs" title="Costs">
+        <EntityCostInsightsContent />
+      </EntityLayout.Route>
 
-    <EntityLayout.Route path="/code-insights" title="Code Insights">
-      <EntityGithubInsightsContent />
-    </EntityLayout.Route>
+      <EntityLayout.Route
+        path="/dynatrace"
+        title="Dynatrace"
+        if={isDynatraceAvailable}
+      >
+        <DynatraceTab />
+      </EntityLayout.Route>
 
-    <EntityLayout.Route path="/tech-insights" title="Scorecards">
-      <Grid container spacing={3} alignItems="stretch">
-        <Grid item xs={12} md={6}>
-          <EntityTechInsightsScorecardCard
-            title="Scorecard 1"
-            description="This is a sample scorecard no. 1"
-            checksId={['titleCheck']}
-          />
-        </Grid>
-        <Grid item xs={12} md={6}>
-          <EntityTechInsightsScorecardCard
-            title="Scorecard 2"
-            checksId={['techDocsCheck']}
-          />
-        </Grid>
-      </Grid>
-    </EntityLayout.Route>
-
-    <EntityLayout.Route path="/code-coverage" title="Code Coverage">
-      <EntityCodeCoverageContent />
-    </EntityLayout.Route>
-
-    <EntityLayout.Route path="/kafka" title="Kafka">
-      <EntityKafkaContent />
-    </EntityLayout.Route>
-
-    <EntityLayout.Route path="/todos" title="TODOs">
-      <EntityTodoContent />
-    </EntityLayout.Route>
-
-    <EntityLayout.Route path="/costs" title="Costs">
-      <EntityCostInsightsContent />
-    </EntityLayout.Route>
-
-    <EntityLayout.Route
-      path="/dynatrace"
-      title="Dynatrace"
-      if={isDynatraceAvailable}
-    >
-      <DynatraceTab />
-    </EntityLayout.Route>
-
-    <EntityLayout.Route path="/feedback" title="Feedback">
-      <EntityFeedbackResponseContent />
-    </EntityLayout.Route>
-  </EntityLayoutWrapper>
-);
+      <EntityLayout.Route path="/feedback" title="Feedback">
+        <EntityFeedbackResponseContent />
+      </EntityLayout.Route>
+    </EntityLayoutWrapper>
+  );
+};
 
 const websiteEntityPage = (
   <EntityLayoutWrapper>
@@ -658,7 +672,7 @@ const defaultEntityPage = (
 const componentPage = (
   <EntitySwitch>
     <EntitySwitch.Case if={isComponentType('service')}>
-      {serviceEntityPage}
+      <ServiceEntityPage />
     </EntitySwitch.Case>
 
     <EntitySwitch.Case if={isComponentType('website')}>
